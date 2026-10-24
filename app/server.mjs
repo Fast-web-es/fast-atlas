@@ -14,7 +14,7 @@ import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const APP_DIR = path.dirname(fileURLToPath(import.meta.url));
 const HOME = path.resolve(process.env.FAST_ATLAS_HOME || os.homedir());
 const DATA = path.resolve(process.env.FAST_ATLAS_DATA || path.join(APP_DIR, 'data'));

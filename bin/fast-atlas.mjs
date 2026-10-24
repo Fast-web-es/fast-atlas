@@ -2,10 +2,10 @@
 /*
   Fast Atlas CLI. A Fast Web Labs app (https://fast-web.es).
 
-    npx fast-atlas             install or update, then open the panel
-    npx fast-atlas open        open the panel
-    npx fast-atlas status      is it running?
-    npx fast-atlas uninstall   stop it and remove it
+    npx github:Fast-web-es/fast-atlas             install or update, then open the panel
+    npx github:Fast-web-es/fast-atlas open        open the panel
+    npx github:Fast-web-es/fast-atlas status      is it running?
+    npx github:Fast-web-es/fast-atlas uninstall   stop it and remove it
 
   It never uses sudo and only writes inside your home folder:
   ~/.fast-atlas (the app and its data) and ~/Library/LaunchAgents/es.fast-web.fast-atlas.plist.
@@ -81,7 +81,7 @@ async function install() {
   }
 
   if (!TEST && sh('lsof', ['-nP', `-iTCP:${PORT}`, '-sTCP:LISTEN']) !== null) {
-    fail(`Port ${PORT} is used by another app. Try: FAST_ATLAS_PORT=4949 npx fast-atlas`);
+    fail(`Port ${PORT} is used by another app. Try: FAST_ATLAS_PORT=4949 npx github:Fast-web-es/fast-atlas`);
   }
 
   // Copy the app. The data folder (history, settings, Cowork backups) is never overwritten.
@@ -132,7 +132,7 @@ async function install() {
   note('Desktop, Documents and Downloads: allow it, or those folders are not measured.');
   note('You may also see "Background items added": that is Fast Atlas.');
   note('Nothing is ever deleted unless you click and confirm.');
-  note('To remove it: npx fast-atlas uninstall');
+  note('To remove it: npx github:Fast-web-es/fast-atlas uninstall');
   console.log('');
 }
 
@@ -173,9 +173,9 @@ else {
   console.log(`
   Fast Atlas · a local map of your Mac's disk and memory
 
-    npx fast-atlas             install or update, then open the panel
-    npx fast-atlas open        open the panel (${URL})
-    npx fast-atlas status      is it running?
-    npx fast-atlas uninstall   stop it and remove it
+    npx github:Fast-web-es/fast-atlas             install or update, then open the panel
+    npx github:Fast-web-es/fast-atlas open        open the panel (${URL})
+    npx github:Fast-web-es/fast-atlas status      is it running?
+    npx github:Fast-web-es/fast-atlas uninstall   stop it and remove it
 `);
 }
