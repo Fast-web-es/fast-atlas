@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="fast-atlas-token" content="%%TOKEN%%">
+<title>Fast Atlas · FASTWEB</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/app-192.png?v=2">
+<meta name="theme-color" content="#09090b">
+<meta name="apple-mobile-web-app-title" content="Fast Atlas">
+<style>
+@font-face { font-family: "Space Grotesk"; src: url(/fonts/SpaceGrotesk-700.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url(/fonts/Inter-400.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url(/fonts/Inter-700.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root {
+  --black: #09090b;
+  --card-home: #0b0b0b;
+  --secondary: #1a1a1a;
+  --white: #ffffff;
+  --slate-300: #cbd5e1;
+  --zinc-300: #d4d4d8;
+  --zinc-400: #a1a1aa;
+  --zinc-500: #71717a;
+  --linea-07: rgba(255, 255, 255, 0.07);
+  --linea-14: rgba(255, 255, 255, 0.14);
+  --linea-20: rgba(255, 255, 255, 0.2);
+  --linea-40: rgba(255, 255, 255, 0.4);
+  --relleno-06: rgba(255, 255, 255, 0.06);
+  --texto-casa: #22c55e;
+  --acento-casa: #0cb111;
+  --primary: hsl(142, 71%, 45%);
+  --ring: hsl(142, 71%, 45%);
+  --destructive: hsl(0, 84%, 60%);
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --page-gutter: clamp(16px, 2vw, 40px);
+  --content-inset: calc(var(--page-gutter) * 2);
+  --control-h: clamp(44px, calc(40.571px + 1.0714vw), 56px);
+  --control-cta-w: clamp(176px, 15.3vw, 220px);
+  --radius-tarjeta: 28px;
+  --radius-articulo: 20px;
+  --radius-pill: 9999px;
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.25s;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--black); -webkit-text-size-adjust: 100%; scroll-padding-top: 96px; }
+body { margin: 0; background: var(--black); color: var(--zinc-400); font-family: var(--font-sans); font-size: 16px; line-height: 1.625; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+p, h1, h2, h3 { margin: 0; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- navbar ---------- */
+.nav { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 16px; height: 72px; padding: 0 var(--page-gutter); background: var(--black); border-bottom: 1px solid var(--linea-07); }
+.lockup { display: block; text-decoration: none; }
+.lockup svg { display: block; height: 22px; width: auto; }
+.nav__nombre { font-size: 14px; line-height: 20px; color: var(--zinc-400); padding-left: 16px; border-left: 1px solid var(--linea-14); }
+.nav .pildora { height: 40px; padding: 0 16px; }
+.pildora > span[data-icono] { display: flex; }
+.nav__estado { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; line-height: 1.3; color: var(--zinc-500); text-align: right; }
+.progreso { position: sticky; top: 72px; z-index: 19; height: 2px; overflow: hidden; }
+.progreso[hidden] { display: none; }
+.progreso span { display: block; height: 100%; background: var(--texto-casa); transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform 0.6s var(--ease-brand); }
+.progreso.indeterminado span { width: 30%; transform: none; animation: barrido 1.6s var(--ease-brand) infinite; }
+@keyframes barrido { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+
+.punto { width: 6px; height: 6px; flex: none; border-radius: var(--radius-pill); background: var(--texto-casa); }
+.punto--claro { background: var(--zinc-300); }
+.punto--hueco { background: transparent; box-shadow: inset 0 0 0 1.5px var(--zinc-500); }
+.punto--rojo { background: var(--destructive); }
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; padding: clamp(56px, 8vw, 128px) var(--content-inset) clamp(48px, 5vw, 80px); }
+.halo { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 90% at 100% 0%, rgba(12, 177, 17, 0.12) 0%, rgba(12, 177, 17, 0) 72%); }
+.hero > :not(.halo) { position: relative; }
+.kicker { display: block; margin: 0 0 12px; text-transform: uppercase; font-size: 11px; line-height: 0.9; letter-spacing: -0.05em; color: var(--zinc-500); }
+.kicker--h1 { color: var(--zinc-400); margin-bottom: 20px; }
+.titular { font-family: var(--font-display); font-weight: 700; font-size: clamp(36px, 5.6vw, 88px); line-height: 0.92; letter-spacing: -0.05em; color: var(--white); font-variant-numeric: tabular-nums; }
+.titular .mascara { display: block; overflow: hidden; padding: 0.06em 0 0.2em; margin: -0.06em 0 -0.2em; }
+.titular .linea { display: block; }
+.titular .acento { color: var(--texto-casa); }
+.titular.entra .linea { animation: subir 0.85s var(--ease-brand) both; }
+.titular.entra .mascara + .mascara .linea { animation-delay: 0.08s; }
+@keyframes subir { from { transform: translateY(112%); } to { transform: none; } }
+.sub { margin-top: 28px; max-width: 52ch; font-size: 16px; line-height: 1.45; letter-spacing: -0.02em; color: var(--zinc-400); }
+.botones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+
+/* ---------- botones de píldora ---------- */
+.boton { display: inline-flex; align-items: center; gap: 12px; height: var(--control-h); min-width: var(--control-cta-w); padding: 0 20px 0 6px; border-radius: var(--radius-pill); white-space: nowrap; font-size: 14px; line-height: 20px; border: 1px solid transparent; text-decoration: none; transition: border-color var(--dur-fast) var(--ease-brand), background-color var(--dur-fast) var(--ease-brand), opacity var(--dur-fast) var(--ease-brand); }
+.boton__icono { display: flex; flex: none; align-items: center; justify-content: center; width: calc(var(--control-h) - 12px); height: calc(var(--control-h) - 12px); border-radius: var(--radius-pill); }
+.boton__icono svg { width: 16px; height: 16px; }
+.boton--primario { background: var(--white); color: var(--black); }
+.boton--primario .boton__icono { background: var(--black); color: var(--white); }
+.boton--secundario { border-color: var(--linea-20); color: var(--white); }
+.boton--secundario .boton__icono { border: 1px solid var(--linea-20); }
+.boton--secundario:not(:disabled):hover { border-color: var(--linea-40); background: var(--relleno-06); }
+.boton--peligro { border-color: rgba(239, 67, 67, 0.5); color: #fca5a5; }
+.boton--peligro .boton__icono { border: 1px solid rgba(239, 67, 67, 0.5); }
+.boton--peligro:not(:disabled):hover { border-color: var(--destructive); background: rgba(239, 67, 67, 0.08); }
+.boton:disabled { opacity: 0.38; }
+.pildora { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: var(--radius-pill); border: 1px solid var(--linea-20); color: var(--white); font-size: 14px; line-height: 20px; white-space: nowrap; transition: border-color var(--dur-fast) var(--ease-brand), background-color var(--dur-fast) var(--ease-brand); }
+.pildora:not(:disabled):hover { border-color: var(--linea-40); background: var(--relleno-06); }
+.pildora svg { width: 16px; height: 16px; }
+.pildora--peligro { border-color: rgba(239, 67, 67, 0.5); color: #fca5a5; }
+.pildora--peligro:not(:disabled):hover { border-color: var(--destructive); background: rgba(239, 67, 67, 0.08); }
+.pildora:disabled { opacity: 0.38; }
+.circulo { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-pill); border: 1px solid var(--linea-20); color: var(--zinc-300); transition: border-color var(--dur-fast) var(--ease-brand), background-color var(--dur-fast) var(--ease-brand), transform var(--dur-fast) var(--ease-brand); }
+.circulo:not(:disabled):hover { border-color: var(--linea-40); background: var(--relleno-06); color: var(--white); }
+.circulo svg { width: 16px; height: 16px; }
+.enlace { color: var(--white); text-decoration: underline; text-decoration-color: var(--linea-40); text-underline-offset: 3px; }
+.enlace:hover { text-decoration-color: var(--white); }
+
+/* ---------- franja del disco ---------- */
+.reparto { padding: 0 var(--page-gutter); }
+.franja { display: flex; gap: 2px; height: clamp(56px, 6vw, 88px); transform-origin: left center; }
+.franja.entra { animation: dibujar 1.1s var(--ease-brand) 0.2s both; }
+@keyframes dibujar { from { transform: scaleX(0); } to { transform: none; } }
+.seg { position: relative; min-width: 3px; background: var(--c); overflow: hidden; text-align: left; transition: opacity var(--dur-fast) var(--ease-brand); }
+.seg--libre { background: transparent; box-shadow: inset 0 0 0 1px var(--linea-20); }
+.seg--purgable { background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 0 1px var(--linea-14); }
+.seg--vacio { flex: 1 1 0; background: transparent; box-shadow: inset 0 0 0 1px var(--linea-14); }
+.franja.foco .seg:not(.activo) { opacity: 0.32; }
+.seg__txt { position: absolute; left: 12px; bottom: 10px; right: 8px; display: flex; flex-direction: column; gap: 2px; font-size: 12px; line-height: 1.2; color: var(--tc, var(--black)); white-space: nowrap; overflow: hidden; pointer-events: none; }
+.seg__txt span, .seg__txt b { overflow: hidden; text-overflow: ellipsis; }
+.seg__txt b { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.leyenda { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 4px 24px; margin-top: 20px; padding: 0 var(--page-gutter); }
+.ley { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 4px 12px; align-items: baseline; padding: 10px 0; text-align: left; border-radius: 4px; transition: opacity var(--dur-fast) var(--ease-brand); }
+.leyenda.foco .ley:not(.activo) { opacity: 0.35; }
+.ley__muestra { width: 10px; height: 10px; background: var(--c); transform: translateY(1px); }
+.ley__muestra--libre { background: transparent; box-shadow: inset 0 0 0 1px var(--linea-40); }
+.ley__muestra--purgable { background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px var(--linea-20); }
+.ley__nombre { font-size: 14px; line-height: 1.3; color: var(--zinc-300); }
+.ley__dato { grid-column: 2; font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.1; letter-spacing: -0.05em; color: var(--white); font-variant-numeric: tabular-nums; }
+.ley__dato small { font-family: var(--font-sans); font-weight: 400; font-size: 12px; letter-spacing: 0; color: var(--zinc-500); margin-left: 6px; }
+.nota-franja { margin-top: 16px; padding: 0 var(--content-inset); font-size: 12px; line-height: 1.5; color: var(--zinc-500); max-width: 110ch; }
+
+/* ---------- secciones ---------- */
+.bloque { padding-top: clamp(80px, 9vw, 144px); }
+.cabeza { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; padding: 0 var(--content-inset); margin-bottom: 32px; }
+.cabeza h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 3.6vw, 52px); line-height: 1; letter-spacing: -0.05em; color: var(--white); max-width: 20ch; }
+.cabeza p { margin-top: 14px; max-width: 50ch; font-size: 15px; line-height: 1.6; color: var(--zinc-400); }
+.caja { margin: 0 var(--page-gutter); background: var(--card-home); border: 1px solid var(--linea-07); border-radius: var(--radius-tarjeta); overflow: hidden; }
+.vacio { padding: 36px; font-size: 15px; color: var(--zinc-400); }
+.rotulo { display: block; margin-bottom: 12px; font-size: 11px; line-height: 1.2; letter-spacing: 0.12em; text-transform: uppercase; color: var(--texto-casa); }
+.cifra-s { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.2vw, 32px); line-height: 1; letter-spacing: -0.06em; color: var(--white); font-variant-numeric: tabular-nums; }
+.tarjeta { font-family: var(--font-display); font-weight: 700; font-size: clamp(19px, 1.9vw, 26px); line-height: 1.15; letter-spacing: -0.04em; color: var(--white); }
+
+/* avisos */
+.avisos { display: grid; gap: 12px; padding-top: 40px; }
+.avisos:empty { display: none; }
+.aviso { margin: 0 var(--page-gutter); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: center; padding: 28px 36px; background: var(--card-home); border: 1px solid var(--linea-07); border-radius: var(--radius-tarjeta); }
+.aviso p { margin-top: 8px; font-size: 14px; line-height: 1.6; max-width: 70ch; }
+.aviso .acciones { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.aviso--error .tarjeta { color: #fca5a5; }
+
+/* lo que crece solo */
+.fila { display: grid; grid-template-columns: minmax(0, 1fr) 150px 168px 212px; gap: 16px 32px; align-items: center; padding: 28px 36px; }
+.fila + .fila { border-top: 1px solid var(--linea-07); }
+.fila__que { margin-top: 8px; max-width: 54ch; font-size: 14px; line-height: 1.55; color: var(--zinc-400); }
+.delta { margin-top: 8px; font-size: 13px; line-height: 1.3; color: var(--zinc-500); }
+.delta--sube { color: var(--texto-casa); }
+.nivel { display: flex; align-items: center; gap: 10px; font-size: 14px; line-height: 1.3; color: var(--zinc-300); }
+.acciones { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
+.circulo[aria-expanded="true"] svg { transform: rotate(180deg); }
+.circulo svg { transition: transform var(--dur-fast) var(--ease-brand); }
+.detalle { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: end; padding: 20px 0 0; border-top: 1px dashed var(--linea-07); }
+.detalle[hidden] { display: none; }
+.detalle p { font-size: 14px; line-height: 1.6; color: var(--zinc-300); max-width: 64ch; }
+.ruta { margin-top: 8px; font-size: 12px; line-height: 1.4; color: var(--zinc-500); word-break: break-all; }
+.apagado .tarjeta, .apagado .cifra-s { color: var(--zinc-500); }
+
+/* proyectos */
+.barra-sup { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding: 28px 36px; border-bottom: 1px solid var(--linea-07); }
+.barra-sup p { font-size: 15px; line-height: 1.6; color: var(--zinc-300); max-width: 72ch; }
+.barra-sup p strong { color: var(--white); font-weight: 700; }
+.seleccion { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--zinc-400); }
+.segmentos { display: inline-flex; padding: 3px; border: 1px solid var(--linea-14); border-radius: var(--radius-pill); }
+.segmentos button { height: 36px; padding: 0 14px; border-radius: var(--radius-pill); font-size: 13px; color: var(--zinc-400); transition: background-color var(--dur-fast) var(--ease-brand), color var(--dur-fast) var(--ease-brand); }
+.segmentos button[aria-pressed="true"] { background: rgba(255, 255, 255, 0.1); color: var(--white); }
+.segmentos button:not([aria-pressed="true"]):hover { color: var(--white); }
+.tfila { display: grid; grid-template-columns: 44px minmax(0, 2.2fr) minmax(110px, 0.9fr) minmax(96px, 0.6fr) minmax(80px, 0.55fr) minmax(70px, 0.45fr) 44px 44px; gap: 8px 16px; align-items: center; padding: 14px 28px 14px 22px; }
+.tfila + .tfila { border-top: 1px solid var(--linea-07); }
+.tcab { padding-top: 18px; padding-bottom: 12px; font-size: 11px; line-height: 1.2; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zinc-500); }
+.tcab > :nth-child(n+4):nth-child(-n+5) { text-align: right; }
+.marca { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer; }
+.marca input { width: 18px; height: 18px; margin: 0; accent-color: var(--primary); cursor: pointer; }
+.pnombre { color: var(--white); font-size: 15px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pcarpeta { font-size: 12px; line-height: 1.4; color: var(--zinc-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ptocado { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--zinc-300); }
+.ptam { text-align: right; font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.04em; color: var(--white); font-variant-numeric: tabular-nums; }
+.ptam--cero { color: var(--zinc-500); }
+.plock { font-size: 13px; color: var(--zinc-400); }
+.plock--no { color: #fca5a5; }
+.pie-tabla { display: flex; justify-content: center; padding: 16px; border-top: 1px solid var(--linea-07); }
+
+.circulo--activo { border-color: rgba(34, 197, 94, 0.55); color: var(--texto-casa); }
+.circulo--activo:not(:disabled):hover { border-color: var(--texto-casa); color: var(--texto-casa); background: rgba(34, 197, 94, 0.06); }
+.pproteccion { display: flex; align-items: center; gap: 6px; margin-top: 3px; font-size: 12px; line-height: 1.4; color: var(--texto-casa); }
+.pproteccion svg { width: 12px; height: 12px; flex: none; }
+.pgestor { font-size: 13px; color: var(--zinc-300); }
+.pgestor--no { color: #fca5a5; }
+.tfila--bloqueada .pnombre { color: var(--zinc-300); }
+.marca input:disabled { cursor: not-allowed; opacity: 0.35; }
+.volver { padding: 24px 36px 28px; border-top: 1px solid var(--linea-07); }
+.volver p { font-size: 14px; line-height: 1.6; max-width: 70ch; }
+.volver ul { list-style: none; margin: 16px 0 0; padding: 0; }
+.volver li { display: grid; grid-template-columns: minmax(120px, 0.45fr) minmax(0, 1.6fr) auto; gap: 16px; align-items: center; padding: 8px 0; }
+.volver li + li { border-top: 1px solid var(--linea-07); }
+.volver .pnombre { font-size: 14px; }
+.cmd { display: block; overflow-x: auto; white-space: nowrap; padding: 8px 12px; border-radius: 10px; background: var(--secondary); font-family: var(--font-sans); font-size: 13px; line-height: 1.4; color: var(--zinc-300); }
+
+/* archivos grandes */
+.gfila { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(130px, 0.8fr) minmax(110px, 0.5fr) 96px 44px 44px; gap: 8px 16px; align-items: center; padding: 12px 28px 12px 36px; }
+.gfila + .gfila { border-top: 1px solid var(--linea-07); }
+.gfila .pnombre { white-space: nowrap; }
+.gtipo { font-size: 13px; color: var(--zinc-300); }
+.gfecha { font-size: 13px; color: var(--zinc-400); }
+
+/* casilla dentro de un modal */
+.casilla { display: flex; gap: 12px; align-items: flex-start; margin-top: 18px; padding: 14px 16px; border: 1px solid var(--linea-14); border-radius: 16px; cursor: pointer; font-size: 14px; line-height: 1.5; color: var(--zinc-300); }
+.casilla input { margin: 2px 0 0; width: 18px; height: 18px; flex: none; accent-color: var(--primary); cursor: pointer; }
+.casilla small { display: block; color: var(--zinc-500); font-size: 12px; margin-top: 2px; }
+
+/* por dentro */
+.migas { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; padding: 24px 36px; border-bottom: 1px solid var(--linea-07); font-size: 14px; }
+.migas .miga { color: var(--zinc-400); padding: 6px 2px; }
+.migas .miga:hover { color: var(--white); }
+.migas .miga[aria-current="page"] { color: var(--white); }
+.migas .sep { color: var(--zinc-500); }
+.migas .atajos { margin-left: auto; display: flex; gap: 8px; }
+.dfila { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(100px, 1fr) 96px 44px 44px; gap: 8px 16px; align-items: center; padding: 10px 28px 10px 36px; }
+.dfila__ex { display: flex; align-items: baseline; gap: 8px; margin-top: 3px; font-size: 12px; line-height: 1.45; color: var(--zinc-400); white-space: normal; }
+.dfila__ex .punto { transform: translateY(-1px); }
+.circulo--peligro { border-color: rgba(239, 67, 67, 0.45); color: #fca5a5; }
+.circulo--peligro:not(:disabled):hover { border-color: var(--destructive); color: #fca5a5; background: rgba(239, 67, 67, 0.08); }
+.circulo--info { border-color: var(--linea-07); color: var(--zinc-500); }
+.dfila + .dfila { border-top: 1px solid var(--linea-07); }
+.dfila__ir { display: flex; align-items: center; gap: 10px; min-height: 44px; text-align: left; color: var(--white); font-size: 15px; line-height: 1.3; }
+.dfila__ir:disabled { cursor: default; color: var(--zinc-300); }
+.dfila__ir:not(:disabled):hover .dfila__nom { text-decoration: underline; text-decoration-color: var(--linea-40); text-underline-offset: 3px; }
+.dfila__ir svg { width: 14px; height: 14px; flex: none; color: var(--zinc-500); }
+.dfila__nom { min-width: 0; overflow: hidden; }
+.dfila__nom > .t { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dfila__et { display: block; font-size: 12px; color: var(--zinc-500); }
+.escalon { position: relative; height: 12px; }
+.escalon span { position: absolute; right: 0; top: 0; bottom: 0; background: rgba(255, 255, 255, 0.55); min-width: 2px; }
+.escalon--acento span { background: var(--texto-casa); }
+.dfila__nota { font-size: 12px; line-height: 1.4; color: var(--zinc-500); }
+.dfila__tam { text-align: right; font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.04em; color: var(--white); font-variant-numeric: tabular-nums; }
+
+/* historia */
+.historia { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(260px, 1fr); }
+.historia > div { padding: 32px 36px; }
+.historia > div + div { border-left: 1px solid var(--linea-07); }
+.grafico svg { display: block; width: 100%; height: auto; overflow: visible; }
+.grafico text { font-family: var(--font-sans); font-size: 11px; fill: var(--zinc-500); }
+.crece-lista { list-style: none; margin: 0; padding: 0; }
+.crece-lista li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 14px 0; }
+.crece-lista li + li { border-top: 1px solid var(--linea-07); }
+.crece-lista span:first-child { font-size: 14px; color: var(--zinc-300); }
+.crece-lista b { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.04em; color: var(--texto-casa); font-variant-numeric: tabular-nums; }
+
+/* ram */
+.ram { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+.ram > div { padding: 32px 36px; }
+.ram > div + div { border-left: 1px solid var(--linea-07); }
+.ram__cifra { font-family: var(--font-display); font-weight: 700; font-size: clamp(32px, 3.6vw, 52px); line-height: 1; letter-spacing: -0.05em; color: var(--white); font-variant-numeric: tabular-nums; }
+.ram__cifra span { color: var(--zinc-500); }
+.ram__barra { display: flex; height: 12px; margin-top: 28px; box-shadow: inset 0 0 0 1px var(--linea-20); }
+.ram__barra span { height: 100%; }
+.ram p { margin-top: 18px; font-size: 14px; line-height: 1.6; max-width: 46ch; }
+.ram__app { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(80px, 1fr) 80px; gap: 16px; align-items: center; padding: 9px 0; }
+.ram__app + .ram__app { border-top: 1px solid var(--linea-07); }
+.ram__nom { font-size: 14px; color: var(--zinc-300); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ram__nom small { display: block; font-size: 12px; color: var(--zinc-500); }
+
+/* automática */
+.auto__cab { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: start; padding: 32px 36px; border-bottom: 1px solid var(--linea-07); }
+.auto__cab p { margin-top: 8px; max-width: 70ch; font-size: 14px; line-height: 1.6; }
+.interruptor { position: relative; width: 52px; height: 30px; margin-top: 2px; border-radius: var(--radius-pill); background: var(--secondary); box-shadow: inset 0 0 0 1px var(--linea-20); transition: background-color var(--dur-fast) var(--ease-brand); }
+.interruptor span { position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: var(--radius-pill); background: var(--zinc-400); transition: transform var(--dur-fast) var(--ease-brand), background-color var(--dur-fast) var(--ease-brand); }
+.interruptor[aria-checked="true"] { background: var(--primary); box-shadow: none; }
+.interruptor[aria-checked="true"] span { transform: translateX(22px); background: var(--black); }
+.auto__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.auto__grid > div { padding: 28px 36px; }
+.auto__grid > div + div { border-left: 1px solid var(--linea-07); }
+.auto__grid p { margin-top: 8px; font-size: 13px; line-height: 1.5; }
+.registro { border-top: 1px solid var(--linea-07); padding: 20px 36px 24px; }
+.registro li { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 16px; padding: 10px 0; font-size: 14px; color: var(--zinc-300); }
+.registro li + li { border-top: 1px solid var(--linea-07); }
+.registro ul { list-style: none; margin: 0; padding: 0; }
+.registro time { color: var(--zinc-500); }
+.registro b { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.04em; color: var(--white); font-variant-numeric: tabular-nums; }
+
+/* pie */
+.pie { padding: clamp(80px, 9vw, 144px) var(--content-inset) 56px; font-size: 13px; line-height: 1.6; color: var(--zinc-500); }
+.pie p + p { margin-top: 6px; }
+.pie code { font-family: var(--font-sans); color: var(--zinc-400); }
+
+/* modal */
+dialog.modal { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 64px); padding: 36px 40px 32px; border: 1px solid var(--linea-07); border-radius: var(--radius-tarjeta); background: var(--card-home); color: var(--zinc-400); }
+dialog.modal::backdrop { background: rgba(0, 0, 0, 0.72); }
+dialog.modal[open] { animation: sube 0.45s var(--ease-brand) both; }
+@keyframes sube { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.05; letter-spacing: -0.045em; color: var(--white); max-width: 20ch; }
+.modal p { margin-top: 14px; font-size: 15px; line-height: 1.6; }
+.modal ul { list-style: none; margin: 20px 0 0; padding: 0; border-top: 1px solid var(--linea-07); }
+.modal li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--linea-07); font-size: 14px; color: var(--zinc-300); }
+.modal li b { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.04em; color: var(--white); font-variant-numeric: tabular-nums; }
+.modal .total { display: flex; justify-content: space-between; padding: 12px 0 0; font-size: 14px; color: var(--white); }
+.modal .botones { margin-top: 28px; }
+.modal .boton { min-width: 0; flex: 1 1 0; }
+
+/* toasts */
+.toasts { position: fixed; left: var(--page-gutter); bottom: var(--page-gutter); z-index: 60; display: flex; flex-direction: column; gap: 8px; max-width: min(440px, calc(100vw - 32px)); }
+.toast { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; background: var(--card-home); border: 1px solid var(--linea-14); border-radius: var(--radius-articulo); font-size: 14px; line-height: 1.5; color: var(--zinc-300); animation: sube 0.45s var(--ease-brand) both; }
+.toast .punto { margin-top: 8px; }
+
+/* demo */
+.demo { margin: 24px var(--page-gutter) 0; padding: 12px 20px; border: 1px dashed var(--linea-20); border-radius: var(--radius-pill); font-size: 13px; color: var(--zinc-300); text-align: center; }
+
+@media (max-width: 1100px) {
+  .fila { grid-template-columns: minmax(0, 1fr) 150px 212px; }
+  .fila .nivel { grid-row: 2; }
+  .auto__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .auto__grid > div:nth-child(3) { border-left: 0; }
+  .auto__grid > div:nth-child(n+3) { border-top: 1px solid var(--linea-07); }
+}
+@media (max-width: 860px) {
+  .nav__nombre { display: none; }
+  .nav__estado { display: none; }
+  #btnInstalar { margin-left: auto; }
+  .historia, .ram { grid-template-columns: minmax(0, 1fr); }
+  .historia > div + div, .ram > div + div { border-left: 0; border-top: 1px solid var(--linea-07); }
+  .tfila { grid-template-columns: 44px minmax(0, 1fr) 44px 44px; }
+  .gfila { grid-template-columns: minmax(0, 1fr) 84px 44px 44px; padding-left: 24px; }
+  .gfila .ocultable { display: none; }
+  .volver li { grid-template-columns: minmax(0, 1fr) auto; }
+  .volver li .pnombre { grid-column: 1 / -1; }
+  .tfila > .ocultable { display: none; }
+  .dfila { grid-template-columns: minmax(0, 1fr) 84px 44px 44px; padding-left: 24px; }
+  .dfila .escalon, .dfila .dfila__nota { display: none; }
+  .fila, .barra-sup, .aviso { padding: 24px; }
+  .registro li { grid-template-columns: minmax(0, 1fr) auto; }
+  .registro time { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .auto__grid { grid-template-columns: minmax(0, 1fr); }
+  .auto__grid > div + div { border-left: 0; border-top: 1px solid var(--linea-07); }
+  .fila { grid-template-columns: minmax(0, 1fr); }
+  .fila .acciones { grid-column: 1; justify-content: flex-start; }
+  .aviso { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="lockup" href="/" aria-label="FASTWEB, Fast Atlas">
+    <svg viewBox="0 0 654 104" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+      <g transform="matrix(-0.619048,0,0,1,367.857143,-375.152001)"><rect x="465" y="419" width="84" height="17" style="fill:rgb(12,177,17);"/></g>
+      <g transform="matrix(-0.309524,0,0,1,223.928571,-333.254401)"><rect x="465" y="419" width="84" height="17" style="fill:rgb(12,177,17);"/></g>
+      <g transform="matrix(-1.147059,0,0,1,660.411765,-418)"><rect x="506" y="420" width="68" height="17" style="fill:rgb(12,177,17);"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-694.908592,-872.070796)"><path d="M574.904,462.859L574.904,415L620.93,415L620.93,423.204L588.712,423.204L588.712,434.759L618.42,434.759L618.42,442.963L588.712,442.963L588.712,462.859L574.904,462.859Z" style="fill:white;fill-rule:nonzero;"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-704.908592,-872.070796)"><path d="M621.14,462.859L640.387,415L664.446,415L683.694,462.859L669.467,462.859L665.492,452.33L639.341,452.33L635.366,462.859L621.14,462.859ZM642.584,443.989L662.25,443.989L653.358,420.675L651.475,420.675L642.584,443.989Z" style="fill:white;fill-rule:nonzero;"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-714.908592,-872.070796)"><path d="M717.9,463.816C712.251,463.816 707.265,463.155 702.941,461.833C698.617,460.511 695.235,458.62 692.794,456.159C690.354,453.697 689.133,450.735 689.133,447.271L689.133,445.356L702.732,445.356L702.732,447.271C702.732,450.142 704.092,452.296 706.812,453.731C709.531,455.167 713.227,455.885 717.9,455.885C722.642,455.885 726.181,455.27 728.517,454.039C730.853,452.808 732.022,451.236 732.022,449.322C732.022,448 731.446,446.929 730.296,446.108C729.145,445.288 727.471,444.615 725.274,444.091C723.078,443.567 720.41,443.077 717.272,442.621L714.866,442.28C709.845,441.55 705.539,440.627 701.947,439.511C698.356,438.394 695.601,436.924 693.684,435.101C691.766,433.278 690.807,430.907 690.807,427.99C690.807,425.073 691.87,422.578 693.997,420.504C696.124,418.43 699.123,416.835 702.993,415.718C706.864,414.601 711.414,414.043 716.645,414.043C721.875,414.043 726.53,414.624 730.609,415.786C734.689,416.949 737.897,418.681 740.233,420.982C742.569,423.284 743.737,426.167 743.737,429.631L743.737,431.682L730.139,431.682L730.139,429.631C730.139,427.808 729.598,426.338 728.517,425.221C727.436,424.105 725.885,423.284 723.862,422.76C721.84,422.236 719.434,421.974 716.645,421.974C712.46,421.974 709.374,422.486 707.387,423.512C705.399,424.538 704.406,425.939 704.406,427.717C704.406,428.902 704.876,429.905 705.818,430.725C706.759,431.545 708.171,432.229 710.054,432.776C711.937,433.323 714.343,433.802 717.272,434.212L719.678,434.554C724.908,435.283 729.459,436.217 733.329,437.357C737.2,438.496 740.216,440.001 742.377,441.869C744.539,443.738 745.62,446.131 745.62,449.048C745.62,451.965 744.487,454.529 742.221,456.74C739.954,458.95 736.746,460.682 732.597,461.936C728.448,463.189 723.548,463.816 717.9,463.816Z" style="fill:white;fill-rule:nonzero;"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-724.908592,-872.070796)"><path d="M770.516,462.859L770.516,423.204L749.177,423.204L749.177,415L805.664,415L805.664,423.204L784.324,423.204L784.324,462.859L770.516,462.859Z" style="fill:white;fill-rule:nonzero;"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-734.908592,-872.070796)"><path d="M820.936,462.859L811.313,415L825.016,415L832.129,456.569L834.012,456.569L843.217,415L867.067,415L876.273,456.569L878.156,456.569L885.269,415L898.972,415L889.348,462.859L865.498,462.859L856.084,420.333L854.201,420.333L844.786,462.859L820.936,462.859Z" style="fill:white;fill-rule:nonzero;"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-744.908592,-872.070796)"><path d="M909.014,462.859L909.014,415L956.087,415L956.087,423.204L922.822,423.204L922.822,434.622L953.158,434.622L953.158,442.826L922.822,442.826L922.822,454.654L956.714,454.654L956.714,462.859L909.014,462.859Z" style="fill:white;fill-rule:nonzero;"/></g>
+      <g transform="matrix(1.3766,0,0,2.106195,-754.908592,-872.070796)"><path d="M966.966,462.859L966.966,415L999.812,415C1004.275,415 1008.163,415.49 1011.475,416.47C1014.788,417.45 1017.368,418.84 1019.216,420.641C1021.064,422.441 1021.988,424.595 1021.988,427.101L1021.988,427.785C1021.988,429.973 1021.361,431.762 1020.105,433.152C1018.85,434.542 1017.368,435.613 1015.66,436.366C1013.951,437.118 1012.33,437.653 1010.795,437.972L1010.795,439.203C1012.33,439.476 1014.003,439.989 1015.816,440.741C1017.63,441.493 1019.181,442.576 1020.471,443.989C1021.762,445.402 1022.407,447.248 1022.407,449.527L1022.407,450.21C1022.407,452.854 1021.465,455.122 1019.582,457.013C1017.699,458.905 1015.102,460.352 1011.789,461.355C1008.477,462.357 1004.624,462.859 1000.23,462.859L966.966,462.859ZM980.774,454.654L998.557,454.654C1001.555,454.654 1003.979,454.176 1005.827,453.219C1007.675,452.262 1008.599,450.894 1008.599,449.117L1008.599,448.433C1008.599,446.655 1007.692,445.288 1005.879,444.331C1004.066,443.373 1001.625,442.895 998.557,442.895L980.774,442.895L980.774,454.654ZM980.774,434.69L998.347,434.69C1001.207,434.69 1003.56,434.212 1005.408,433.255C1007.256,432.298 1008.18,430.976 1008.18,429.289L1008.18,428.606C1008.18,426.874 1007.274,425.54 1005.461,424.606C1003.647,423.672 1001.276,423.204 998.347,423.204L980.774,423.204L980.774,434.69Z" style="fill:white;fill-rule:nonzero;"/></g>
+    </svg>
+  </a>
+  <span class="nav__nombre">Fast Atlas</span>
+  <div class="nav__estado" id="navEstado" aria-live="polite"></div>
+  <button type="button" class="pildora" id="btnInstalar" hidden><span data-icono="instalar"></span>Install app</button>
+</header>
+<div class="progreso" id="progreso" hidden><span></span></div>
+
+<main>
+  <div id="demo"></div>
+
+  <section class="hero" aria-labelledby="titular">
+    <div class="halo" aria-hidden="true"></div>
+    <span class="kicker kicker--h1" id="kicker">Your Mac</span>
+    <h1 class="titular" id="titular"><span class="mascara"><span class="linea" id="l1">Looking at your Mac.</span></span><span class="mascara"><span class="linea acento" id="l2">Give me a moment.</span></span></h1>
+    <p class="sub" id="sub"></p>
+    <div class="botones">
+      <button class="boton boton--primario" id="btnLimpiar" type="button"><span class="boton__icono" data-icono="derecha"></span><span>Clean now</span></button>
+      <button class="boton boton--secundario" id="btnEscanear" type="button"><span class="boton__icono" data-icono="girar"></span><span id="txtEscanear">Scan</span></button>
+    </div>
+  </section>
+
+  <section class="reparto" aria-labelledby="tReparto">
+    <h2 class="sr-only" id="tReparto">How your disk is split</h2>
+    <div class="franja" id="franja"><div class="seg seg--vacio"></div></div>
+  </section>
+  <div class="leyenda" id="leyenda"></div>
+  <p class="nota-franja" id="explicaSeg" aria-live="polite" style="color:var(--zinc-300);font-size:13px">Hover the bar or the legend to see what each part is. Click to look inside.</p>
+  <p class="nota-franja" id="notaFranja"></p>
+
+  <div class="avisos" id="avisos"></div>
+
+  <section class="bloque" id="sec-crece" aria-labelledby="tCrece">
+    <div class="cabeza">
+      <div>
+        <h2 id="tCrece">What grows on its own</h2>
+        <p>What swells the most with the way you work. Next to each item: what it is and what happens if you clean it.</p>
+      </div>
+    </div>
+    <div class="caja" id="crece"><p class="vacio">Measuring.</p></div>
+  </section>
+
+  <section class="bloque" id="sec-proyectos" aria-labelledby="tProyectos">
+    <div class="cabeza">
+      <div>
+        <h2 id="tProyectos">Your projects</h2>
+        <p>Each project keeps its libraries (node_modules) and its build (.next). Your code is not there. The lock marks what is never touched: you set it, or I set it when Claude or a scheduled task uses the project.</p>
+      </div>
+      <div class="segmentos" role="group" aria-label="Sort projects">
+        <button type="button" data-orden="tam" aria-pressed="true">Heaviest</button>
+        <button type="button" data-orden="parado" aria-pressed="false">Most idle</button>
+      </div>
+    </div>
+    <div class="caja" id="proyectos"><p class="vacio">Looking for projects.</p></div>
+  </section>
+
+  <section class="bloque" id="sec-grandes" aria-labelledby="tGrandes">
+    <div class="cabeza">
+      <div>
+        <h2 id="tGrandes">Large files</h2>
+        <p>Single files over 250 MB in your home folder, not counting Library. Move what you do not need to the Trash.</p>
+      </div>
+    </div>
+    <div class="caja" id="grandes"><p class="vacio">They are found during the full scan.</p></div>
+  </section>
+
+  <section class="bloque" id="sec-dentro" aria-labelledby="tDentro">
+    <div class="cabeza">
+      <div>
+        <h2 id="tDentro">Inside</h2>
+        <p>Open any folder to see what takes space and what each thing is. Your own files can go to the Trash from here; macOS and app data cannot.</p>
+      </div>
+    </div>
+    <div class="caja" id="dentro"><p class="vacio">Measuring your home folder.</p></div>
+  </section>
+
+  <section class="bloque" id="sec-historia" aria-labelledby="tHistoria">
+    <div class="cabeza">
+      <div>
+        <h2 id="tHistoria">How your disk is doing</h2>
+        <p>Free space over the last 30 days. Green dots are cleanups.</p>
+      </div>
+    </div>
+    <div class="caja historia" id="historia"></div>
+  </section>
+
+  <section class="bloque" id="sec-ram" aria-labelledby="tRam">
+    <div class="cabeza">
+      <div>
+        <h2 id="tRam">Memory, right now</h2>
+        <p>Updates every 5 seconds. Per-app numbers are approximate: apps share memory.</p>
+      </div>
+    </div>
+    <div class="caja ram" id="ram"><p class="vacio">Reading memory.</p></div>
+  </section>
+
+  <section class="bloque" id="sec-auto" aria-labelledby="tAuto">
+    <div class="cabeza">
+      <div>
+        <h2 id="tAuto">Automatic cleanup</h2>
+        <p>Once a week, only things that rebuild themselves. Your files are never touched. Off until you turn it on.</p>
+      </div>
+    </div>
+    <div class="caja" id="auto"></div>
+  </section>
+</main>
+
+<footer class="pie" id="pie"></footer>
+<dialog class="modal" id="modal" aria-labelledby="modalTitulo"></dialog>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, el = document) => el.querySelector(s);
+  const TOKEN = document.querySelector('meta[name="fast-atlas-token"]').content;
+  const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DIA = 864e5;
+
+  const SVG = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ICONO = {
+    derecha: SVG('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>'),
+    girar: SVG('<path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>'),
+    papelera: SVG('<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/>'),
+    carpeta: SVG('<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>'),
+    deshacer: SVG('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),
+    chevron: SVG('<path d="m9 18 6-6-6-6"/>'),
+    abajo: SVG('<path d="m6 9 6 6 6-6"/>'),
+    check: SVG('<path d="M20 6 9 17l-5-5"/>'),
+    candado: SVG('<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'),
+    abierto: SVG('<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>'),
+    instalar: SVG('<rect width="16" height="16" x="4" y="4" rx="4"/><path d="M12 8v8"/><path d="m8.5 12.5 3.5 3.5 3.5-3.5"/>'),
+    info: SVG('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>'),
+    copiar: SVG('<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>'),
+  };
+  document.querySelectorAll('[data-icono]').forEach(el => { el.innerHTML = ICONO[el.dataset.icono] || ''; });
+
+  // ---------------------------------------------------------- utilidades
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = (n, d = 1) => Number(n).toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  function gb(b) {
+    if (b == null) return 'not measured';
+    const g = b / 1e9;
+    if (g >= 100) return fmt(g, 0) + ' GB';
+    if (g >= 1) return fmt(g, 1) + ' GB';
+    const m = b / 1e6;
+    return (m >= 1 ? fmt(m, 0) : '0') + ' MB';
+  }
+  function gbRam(b) { return fmt(b / 1073741824, b / 1073741824 >= 10 ? 0 : 1) + ' GB'; }
+  function hace(t) {
+    if (!t) return 'never';
+    const s = (Date.now() - t) / 1000;
+    if (s < 60) return 'just now';
+    const m = s / 60; if (m < 60) return `${Math.round(m)} min ago`;
+    const h = m / 60; if (h < 24) return `${Math.round(h)} h ago`;
+    const d = h / 24; if (d < 2) return 'yesterday';
+    if (d < 31) return `${Math.round(d)} days ago`;
+    const me = Math.round(d / 30.4); if (me < 12) return `${me} ${me === 1 ? 'month' : 'months'} ago`;
+    const a = d / 365; return `${fmt(a, 1)} ${a < 1.5 ? 'year' : 'years'} ago`;
+  }
+  const fechaLarga = (t) => new Date(t).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
+  const fechaCorta = (t) => new Date(t).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+  const conHora = (t) => new Date(t).toLocaleString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  const rutaCorta = (r) => (E && r && r.startsWith(E.home) ? '~' + r.slice(E.home.length) : r || '');
+
+  async function api(ruta, cuerpo) {
+    const op = { headers: { 'X-Fast-Atlas-Token': TOKEN } };
+    if (cuerpo !== undefined) { op.method = 'POST'; op.headers['Content-Type'] = 'application/json'; op.body = JSON.stringify(cuerpo); }
+    let r;
+    try { r = await fetch(ruta, op); } catch { throw new Error('The panel is not responding. Is Fast Atlas running?'); }
+    let datos = null;
+    try { datos = await r.json(); } catch {}
+    if (r.status === 403 && !sessionStorage.getItem('fast-atlas-reload')) { sessionStorage.setItem('fast-atlas-reload', '1'); location.reload(); }
+    if (!datos) throw new Error('Unexpected answer from the panel (' + r.status + ').');
+    sessionStorage.removeItem('fast-atlas-reload');
+    return datos;
+  }
+
+  function aviso(texto, tipo = 'ok') {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `<span class="punto ${tipo === 'error' ? 'punto--rojo' : ''}"></span><span>${esc(texto)}</span>`;
+    $('#toasts').appendChild(t);
+    setTimeout(() => t.remove(), tipo === 'error' ? 9000 : 6000);
+  }
+
+  function modal({ titulo, cuerpo = '', confirmar = null, peligro = false, cancelar = 'Cancel', icono = 'papelera', alAbrir = null }) {
+    const d = $('#modal');
+    const btnSi = confirmar ? `<button class="boton ${peligro ? 'boton--peligro' : 'boton--primario'}" value="si"><span class="boton__icono">${ICONO[icono]}</span><span>${esc(confirmar)}</span></button>` : '';
+    const btnNo = cancelar ? `<button class="boton boton--secundario" value="no"><span class="boton__icono">${ICONO.chevron}</span><span>${esc(cancelar)}</span></button>` : '';
+    d.innerHTML = `<form method="dialog"><h3 id="modalTitulo">${esc(titulo)}</h3>${cuerpo}<div class="botones">${btnNo}${btnSi}</div></form>`;
+    d.returnValue = '';
+    d.showModal();
+    if (alAbrir) alAbrir(d);
+    return new Promise(res => d.addEventListener('close', () => res(d.returnValue === 'si'), { once: true }));
+  }
+
+  async function copiar(texto) {
+    try { await navigator.clipboard.writeText(texto); }
+    catch { const t = document.createElement('textarea'); t.value = texto; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+    aviso('Copied. Paste it in Terminal.');
+  }
+
+  // ---------------------------------------------------------- estado
+  let E = null;
+  let temporizador = null;
+  let tituloAnterior = '';
+  let franjaDibujada = false;
+  const ui = { abiertos: new Set(), marcados: new Set(), orden: 'tam', todos: false, carpeta: null, carpetaDatos: null, ocupado: false };
+
+  async function refrescar() {
+    clearTimeout(temporizador);
+    try {
+      E = await api('/api/estado');
+      pintar();
+      if (!ui.carpeta) irACarpeta(E.home, false);
+    } catch (e) {
+      $('#navEstado').innerHTML = `<span class="punto punto--rojo"></span><span>${esc(e.message)}</span>`;
+    }
+    temporizador = setTimeout(refrescar, E && E.escaneo && E.escaneo.enCurso ? 2000 : 30000);
+  }
+
+  function pintar() {
+    pintarNav(); pintarHero(); pintarFranja(); pintarAvisos(); pintarCrece(); pintarProyectos(); pintarGrandes(); pintarHistoria(); pintarAuto(); pintarPie();
+    $('#demo').innerHTML = E.demo ? '<p class="demo">Sample data to show the design. None of this is your Mac and the buttons do not touch anything.</p>' : '';
+  }
+
+  function pintarNav() {
+    const e = E.escaneo || {};
+    const barra = $('#progreso');
+    if (e.enCurso) {
+      const pasos = e.pasos ? ` ${e.paso}/${e.pasos}` : '';
+      $('#navEstado').innerHTML = `<span class="punto"></span><span>${esc(e.fase || 'Scanning')}${pasos}${e.detalle ? '. ' + esc(e.detalle) : ''}</span>`;
+      barra.hidden = false;
+      if (e.pasos) { barra.classList.remove('indeterminado'); barra.style.setProperty('--p', Math.min(1, e.paso / e.pasos)); }
+      else barra.classList.add('indeterminado');
+    } else {
+      barra.hidden = true;
+      $('#navEstado').textContent = E.tCompleto ? `Full scan ${hace(E.tCompleto)}` : 'Not scanned yet';
+    }
+  }
+
+  function pintarHero() {
+    const t = E.titular;
+    $('#kicker').textContent = (E.maquina && E.maquina.nombre) || 'Your Mac';
+    const clave = t.l1 + '|' + t.l2;
+    if (clave !== tituloAnterior) {
+      $('#l1').textContent = t.l1;
+      $('#l2').textContent = t.l2;
+      const h = $('#titular');
+      if (!REDUCIR) { h.classList.remove('entra'); void h.offsetWidth; h.classList.add('entra'); }
+      tituloAnterior = clave;
+    }
+    $('#sub').textContent = t.sub || '';
+    const enCurso = E.escaneo && E.escaneo.enCurso;
+    $('#btnEscanear').disabled = !!enCurso;
+    $('#txtEscanear').textContent = enCurso ? 'Scanning' : 'Scan';
+    $('#btnLimpiar').disabled = !E.proyectos;
+  }
+
+  // ---------------------------------------------------------- franja
+  const TONOS = ['rgba(255,255,255,.92)', 'rgba(255,255,255,.74)', 'rgba(255,255,255,.58)', 'rgba(255,255,255,.46)', 'rgba(255,255,255,.36)', 'rgba(255,255,255,.28)', 'rgba(255,255,255,.22)', 'rgba(255,255,255,.17)', 'rgba(255,255,255,.13)'];
+  function colores(segs) {
+    let k = 0;
+    const culpable = E.titular && E.titular.seg;
+    return segs.map(s => {
+      if (s.libre) return { ...s, c: 'transparent', tc: 'var(--zinc-300)' };
+      if (s.purgable) return { ...s, c: 'rgba(255,255,255,.05)', tc: 'var(--zinc-400)' };
+      if (s.id === culpable) return { ...s, c: 'var(--texto-casa)', tc: 'var(--black)', acento: true };
+      if (s.id === 'sistema') return { ...s, c: 'rgba(255,255,255,.09)', tc: 'var(--zinc-400)' };
+      const i = Math.min(k++, TONOS.length - 1);
+      return { ...s, c: TONOS[i], tc: i <= 2 ? 'var(--black)' : 'var(--white)' };
+    });
+  }
+  function pintarFranja() {
+    const franja = $('#franja'), leyenda = $('#leyenda');
+    if (!E.reparto || !E.disco) {
+      franja.innerHTML = '<div class="seg seg--vacio"></div>';
+      leyenda.innerHTML = '';
+      $('#notaFranja').textContent = '';
+      return;
+    }
+    const segs = colores(E.reparto);
+    const total = E.disco.total;
+    franja.innerHTML = segs.map(s => {
+      const pct = s.bytes / total * 100;
+      const texto = pct >= 7 ? `<span class="seg__txt" style="--tc:${s.tc}"><span>${esc(s.nombre)}</span><b>${esc(gb(s.bytes))}</b></span>` : '';
+      return `<button type="button" class="seg ${s.libre ? 'seg--libre' : s.purgable ? 'seg--purgable' : ''}" data-seg="${esc(s.id)}" style="flex:${Math.max(s.bytes / 1e9, 0.001)} 1 0px;--c:${s.c}" aria-label="${esc(s.nombre)}: ${esc(gb(s.bytes))}" title="${esc(s.nombre)}: ${esc(gb(s.bytes))}">${texto}</button>`;
+    }).join('');
+    leyenda.innerHTML = segs.map(s => `<button type="button" class="ley" data-seg="${esc(s.id)}"><span class="ley__muestra ${s.libre ? 'ley__muestra--libre' : s.purgable ? 'ley__muestra--purgable' : ''}" style="--c:${s.c}"></span><span class="ley__nombre">${esc(s.nombre)}</span><span class="ley__dato">${esc(gb(s.bytes))}<small>${fmt(s.bytes / total * 100, s.bytes / total < 0.1 ? 1 : 0)} %</small></span></button>`).join('');
+    const sis = segs.find(s => s.id === 'sistema');
+    const pur = E.disco.purgable || 0;
+    const cuadra = E.disco.segunMac ? `Free plus Purgeable is what your Mac shows as available (${gb(E.disco.disponible)}): purgeable space is released by macOS on its own when needed.` : 'I could not read the available space from macOS: the number above is only truly free space, without purgeable.';
+    $('#notaFranja').textContent = `${gb(total)} disk, in GB as your Mac counts them (1 GB = 1,000 MB). ${pur || E.disco.segunMac || E.disco.esMac ? cuadra + ' ' : ''}“System and protected” is ${sis ? sis.nota.charAt(0).toLowerCase() + sis.nota.slice(1) : 'what cannot be measured'}${E.tm ? ` There ${E.tm === 1 ? 'is 1 local Time Machine snapshot' : `are ${E.tm} local Time Machine snapshots`}: macOS deletes them on its own when it needs space.` : ''}`;
+    if (!franjaDibujada && !REDUCIR) { franja.classList.add('entra'); franjaDibujada = true; }
+  }
+  function enfocarSeg(id) {
+    const franja = $('#franja'), leyenda = $('#leyenda');
+    const sg = id && (E.reparto || []).find(x => x.id === id);
+    $('#explicaSeg').textContent = sg ? `${sg.nombre}: ${sg.explica || ''}` : 'Hover the bar or the legend to see what each part is. Click to look inside.';
+    franja.classList.toggle('foco', !!id); leyenda.classList.toggle('foco', !!id);
+    document.querySelectorAll('[data-seg]').forEach(el => el.classList.toggle('activo', el.dataset.seg === id));
+  }
+  function abrirSeg(id) {
+    const s = (E.reparto || []).find(x => x.id === id);
+    if (!s) return;
+    if (s.ir === 'proyectos') return $('#sec-proyectos').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth' });
+    if (s.ruta) { irACarpeta(s.ruta, true); return; }
+  }
+
+  // ---------------------------------------------------------- avisos
+  function pintarAvisos() {
+    const partes = [];
+    if (E.error) partes.push(`<div class="aviso aviso--error"><div><div class="tarjeta">The last scan failed.</div><p>${esc(E.error)} Scan again. If it keeps failing, check ~/.fast-atlas/data/server.log.</p></div></div>`);
+    const c = E.cowork;
+    for (const r of (c && c.respaldos) || []) {
+      partes.push(`<div class="aviso"><div><div class="tarjeta">${r.rehecho ? 'Backup of the rebuilt Cowork disk' : 'You have a Cowork backup'}: ${esc(gb(r.bytes))}.</div><p>${r.rehecho ? 'This is the disk Cowork created after the reset, kept when the old one was restored. If Cowork works fine, delete it.' : `I kept it when Cowork was reset (${esc(conHora(r.t))}). If Cowork has worked fine since then, delete it to get the space back. If something fails, restore it.`}</p></div><div class="acciones"><button type="button" class="pildora" data-accion="restaurar" data-archivo="${esc(r.archivo)}">${ICONO.deshacer}Restore</button><button type="button" class="pildora pildora--peligro" data-accion="borrar-copia" data-archivo="${esc(r.archivo)}">${ICONO.papelera}Delete backup</button></div></div>`);
+    }
+    $('#avisos').innerHTML = partes.join('');
+  }
+
+  // ---------------------------------------------------------- lo que crece solo
+  const NIVEL = {
+    rehace: ['punto', 'Rebuilds itself'],
+    revisar: ['punto punto--claro', 'Review by hand'],
+    mirar: ['punto punto--hueco', 'Look, do not touch'],
+  };
+  function textoDelta(d) {
+    if (d == null || !E.crecimiento.desde) return '';
+    const dias = Math.max(1, Math.round((Date.now() - E.crecimiento.desde) / DIA));
+    const cuando = dias === 1 ? 'since yesterday' : `in ${dias} days`;
+    if (d >= 50e6) return `<div class="delta ${d >= 1e9 ? 'delta--sube' : ''}">+${esc(gb(d))} ${cuando}</div>`;
+    if (d <= -50e6) return `<div class="delta">−${esc(gb(-d))} ${cuando}</div>`;
+    return `<div class="delta">Stable ${cuando}</div>`;
+  }
+  function botonAccion(s) {
+    if (!s.existe) return '';
+    if (s.accion === 'cowork') return E.cowork && E.cowork.disponible ? `<button type="button" class="pildora" data-accion="cowork">Reset</button>` : '';
+    if (s.accion === 'npm') return `<button type="button" class="pildora" data-accion="npm">Empty</button>`;
+    if (s.accion === 'proyectos') return `<button type="button" class="pildora" data-accion="ir-proyectos">See projects</button>`;
+    if (s.accion === 'carpeta') return `<button type="button" class="pildora" data-accion="carpeta" data-ruta="${esc(s.ruta)}">Look inside</button>`;
+    if (s.accion === 'finder') return `<button type="button" class="pildora" data-accion="finder" data-ruta="${esc(s.ruta)}">Show in Finder</button>`;
+    if (s.accion === 'vaciar') return E.papelera && E.papelera.esMac ? `<button type="button" class="pildora pildora--peligro" data-accion="vaciar-papelera">Empty</button>` : `<button type="button" class="pildora" data-accion="finder" data-ruta="${esc(s.ruta)}">Show in Finder</button>`;
+    return '';
+  }
+  function pintarCrece() {
+    const lista = E.seguimiento || [];
+    if (!lista.length) { $('#crece').innerHTML = '<p class="vacio">Midiendo.</p>'; return; }
+    $('#crece').innerHTML = lista.map(s => {
+      const abierto = ui.abiertos.has(s.id);
+      const [clase, texto] = NIVEL[s.nivel] || NIVEL.revisar;
+      const tam = s.existe ? gb(s.bytes) : 'None';
+      const enviado = s.id === 'papelera' && E.papelera && E.papelera.enviado > 0 ? `<div class="delta delta--sube">You sent ${esc(gb(E.papelera.enviado))} from here: freed when you empty it</div>` : '';
+      const parcial = (s.parcial ? '<div class="delta">macOS does not let it be fully measured</div>' : '') + enviado;
+      return `<div class="fila ${s.existe ? '' : 'apagado'}" data-id="${esc(s.id)}">
+        <div><div class="tarjeta">${esc(s.nombre)}</div><p class="fila__que">${esc(s.que)}</p></div>
+        <div><div class="cifra-s">${esc(tam)}</div>${textoDelta(s.delta)}${parcial}</div>
+        <div class="nivel"><span class="${clase}"></span>${texto}</div>
+        <div class="acciones">${botonAccion(s)}<button type="button" class="circulo" data-accion="detalle" data-id="${esc(s.id)}" aria-expanded="${abierto}" aria-label="What happens if I clean it">${ICONO.abajo}</button></div>
+        <div class="detalle" ${abierto ? '' : 'hidden'}>
+          <div><p><strong style="color:var(--white)">If you clean it:</strong> ${esc(s.siLimpias)}</p>${s.ruta ? `<div class="ruta">${esc(rutaCorta(s.ruta))}</div>` : ''}</div>
+          ${s.ruta && s.existe && s.accion !== 'finder' ? `<button type="button" class="pildora" data-accion="finder" data-ruta="${esc(s.ruta)}">${ICONO.carpeta}Show in Finder</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ---------------------------------------------------------- proyectos
+  function parado(p) { return p.tocado && Date.now() - p.tocado > E.config.diasParado * DIA; }
+  const NOMBRE_LOCK = { npm: 'npm', pnpm: 'pnpm', yarn: 'yarn', bun: 'bun' };
+  function motivoProteccion(p) {
+    if (p.proteccion === 'manual') return 'Do not touch: you locked it';
+    if (p.proteccion === 'uso') return 'Do not touch: used by ' + p.usadoPor.join(' and ');
+    return '';
+  }
+  function pintarProyectos() {
+    document.querySelectorAll('[data-orden]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.orden === ui.orden)));
+    const P = E.proyectos;
+    if (!P) { $('#proyectos').innerHTML = `<p class="vacio">${E.escaneo && E.escaneo.enCurso ? 'Looking for projects. The first scan takes a while.' : 'Press Scan to find your projects.'}</p>`; return; }
+    const volver = pintarVolver();
+    if (!P.lista.length) { $('#proyectos').innerHTML = '<p class="vacio">No projects with node_modules or .next found in your home folder.</p>' + volver; return; }
+    const lista = P.lista.slice().sort(ui.orden === 'tam' ? (a, b) => (b.nm + b.next) - (a.nm + a.next) : (a, b) => (a.tocado || 0) - (b.tocado || 0));
+    const rutas = new Set(lista.filter(p => !p.proteccion).map(p => p.ruta));
+    for (const r of [...ui.marcados]) if (!rutas.has(r)) ui.marcados.delete(r);
+    const total = lista.reduce((t, p) => t + p.nm + p.next, 0);
+    const parados = lista.filter(p => parado(p) && p.lock && !p.proteccion && p.nm > 0);
+    const sumParados = parados.reduce((t, p) => t + p.nm + p.next, 0);
+    const marcados = lista.filter(p => ui.marcados.has(p.ruta));
+    const sumMarcados = marcados.reduce((t, p) => t + p.nm + p.next, 0);
+    const visibles = ui.todos ? lista : lista.slice(0, 12);
+    const filas = visibles.map(p => {
+      const par = parado(p);
+      const bloq = !!p.proteccion;
+      const motivo = motivoProteccion(p);
+      return `<div class="tfila ${bloq ? 'tfila--bloqueada' : ''}">
+        <label class="marca"><input type="checkbox" data-marca="${esc(p.ruta)}" ${ui.marcados.has(p.ruta) ? 'checked' : ''} ${bloq ? 'disabled' : ''} aria-label="Select ${esc(p.nombre)}"></label>
+        <div style="min-width:0"><div class="pnombre">${esc(p.nombre)}</div><div class="pcarpeta">~/${esc(p.carpeta)}</div>${motivo ? `<div class="pproteccion">${ICONO.candado}<span>${esc(motivo)}</span></div>` : ''}</div>
+        <div class="ptocado ocultable">${par ? '<span class="punto"></span>' : ''}${esc(hace(p.tocado))}</div>
+        <div class="ptam ${p.nm ? '' : 'ptam--cero'} ocultable">${p.nm ? esc(gb(p.nm)) : 'none'}</div>
+        <div class="ptam ${p.next ? '' : 'ptam--cero'} ocultable">${p.next ? esc(gb(p.next)) : 'none'}</div>
+        <div class="pgestor ${p.lock ? '' : 'pgestor--no'} ocultable" title="${p.lock ? 'To restore: ' + esc(p.comando) : 'No lockfile: versions may change when reinstalling'}">${p.lock ? esc(NOMBRE_LOCK[p.gestor] || p.gestor) : 'no lockfile'}</div>
+        <button type="button" class="circulo ${bloq ? 'circulo--activo' : ''}" data-accion="proteger" data-ruta="${esc(p.ruta)}" data-valor="${bloq ? '0' : '1'}" aria-pressed="${bloq}" title="${bloq ? 'Unlock' : 'Lock: do not touch'}" aria-label="${bloq ? 'Unlock' : 'Lock'} ${esc(p.nombre)}">${bloq ? ICONO.candado : ICONO.abierto}</button>
+        <button type="button" class="circulo" data-accion="finder" data-ruta="${esc(p.ruta)}" aria-label="Show ${esc(p.nombre)} in Finder">${ICONO.carpeta}</button>
+      </div>`;
+    }).join('');
+    $('#proyectos').innerHTML = `
+      <div class="barra-sup">
+        <p><strong>${lista.length} ${lista.length === 1 ? 'project' : 'projects'}</strong> with dependencies or builds: <strong>${esc(gb(total))}</strong>.${parados.length ? ` ${parados.length} ${parados.length === 1 ? 'has' : 'have'} been idle for more than ${E.config.diasParado} days, with a lockfile and no lock: <strong>${esc(gb(sumParados))}</strong>. <button type="button" class="enlace" data-accion="marcar-parados">Select them</button>` : ''}</p>
+        <div class="seleccion"><span>${marcados.length ? `${marcados.length} selected, ${esc(gb(sumMarcados))}` : 'Select the ones you want to delete'}</span><button type="button" class="pildora pildora--peligro" data-accion="borrar-marcados" ${marcados.length ? '' : 'disabled'}>${ICONO.papelera}Delete</button></div>
+      </div>
+      <div class="tfila tcab"><span></span><span>Project</span><span class="ocultable">Last touched</span><span class="ocultable" style="text-align:right">Dependencies</span><span class="ocultable" style="text-align:right">Build</span><span class="ocultable">Manager</span><span></span><span></span></div>
+      ${filas}
+      ${lista.length > 12 ? `<div class="pie-tabla"><button type="button" class="pildora" data-accion="ver-todos">${ui.todos ? 'Show fewer' : `Show all ${lista.length}`}</button></div>` : ''}
+      ${volver}`;
+  }
+  function pintarVolver() {
+    const v = E.volver || [];
+    if (!v.length) return '';
+    return `<div class="volver"><span class="rotulo">To restore what you cleaned</span><p>When you pick one up again, paste its command in Terminal and let it finish. It disappears from here once its dependencies are back.</p><ul>${v.map(x => `<li><span class="pnombre">${esc(x.nombre)}</span><code class="cmd">${esc(x.comando)}</code><button type="button" class="pildora" data-accion="copiar" data-texto="${esc(x.comando)}">${ICONO.copiar}Copy</button></li>`).join('')}</ul></div>`;
+  }
+
+  // ---------------------------------------------------------- archivos grandes
+  function tipoArchivo(n) {
+    const e = (n.split('.').pop() || '').toLowerCase();
+    if (['dmg', 'pkg'].includes(e)) return 'Installer: not needed if the app is installed';
+    if (['iso', 'img'].includes(e)) return 'Disk image';
+    if (['zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'xz'].includes(e)) return 'Archive';
+    if (['mov', 'mp4', 'mkv', 'avi', 'm4v', 'webm', 'prores', 'mxf'].includes(e)) return 'Video';
+    if (['wav', 'aif', 'aiff', 'flac', 'mp3'].includes(e)) return 'Audio';
+    if (['safetensors', 'gguf', 'ckpt', 'pt', 'pth', 'onnx', 'bin'].includes(e)) return 'AI model';
+    if (e === 'blend') return 'Blender project';
+    if (['psd', 'psb', 'ai', 'fig', 'sketch', 'aep', 'prproj'].includes(e)) return 'Design file';
+    if (['vmdk', 'vdi', 'qcow2', 'utm', 'raw'].includes(e)) return 'Virtual disk';
+    return 'File';
+  }
+  function pintarGrandes() {
+    const g = E.grandes;
+    if (!g) { $('#grandes').innerHTML = `<p class="vacio">${E.escaneo && E.escaneo.enCurso ? 'Looking for large files.' : 'They are found during the full scan.'}</p>`; return; }
+    if (!g.lista.length) { $('#grandes').innerHTML = '<p class="vacio">No single files over 250 MB outside Library.</p>'; return; }
+    const total = g.lista.reduce((t, x) => t + x.bytes, 0);
+    $('#grandes').innerHTML = `<div class="barra-sup"><p><strong>${g.lista.length} ${g.lista.length === 1 ? 'file' : 'files'}</strong> over 250 MB: <strong>${esc(gb(total))}</strong> in total.</p></div>
+      <div class="gfila tcab"><span>File</span><span class="ocultable">What it is</span><span class="ocultable">Modified</span><span style="text-align:right">Size</span><span></span><span></span></div>
+      ${g.lista.map(x => `<div class="gfila">
+        <div style="min-width:0"><div class="pnombre">${esc(x.nombre)}</div><div class="pcarpeta">~/${esc(x.carpeta)}</div></div>
+        <div class="gtipo ocultable">${esc(tipoArchivo(x.nombre))}</div>
+        <div class="gfecha ocultable">${esc(hace(x.mtime))}</div>
+        <div class="dfila__tam">${esc(gb(x.bytes))}</div>
+        <button type="button" class="circulo" data-accion="finder" data-ruta="${esc(x.ruta)}" aria-label="Show ${esc(x.nombre)} in Finder">${ICONO.carpeta}</button>
+        ${botonPapelera({ ruta: x.ruta, nombre: x.nombre, bytes: x.bytes, explica: tipoArchivo(x.nombre), noBorrar: x.noBorrar })}
+      </div>`).join('')}`;
+  }
+
+  function botonPapelera(x) {
+    if (x.noBorrar) return `<button type="button" class="circulo circulo--info" data-accion="no-borrar" data-motivo="${esc(x.noBorrar)}" title="${esc(x.noBorrar)}" aria-label="Why ${esc(x.nombre)} cannot be deleted">${ICONO.info}</button>`;
+    return `<button type="button" class="circulo circulo--peligro" data-accion="a-papelera" data-ruta="${esc(x.ruta)}" data-nombre="${esc(x.nombre)}" data-bytes="${x.bytes || 0}" data-explica="${esc(x.explica || '')}" title="Move to Trash" aria-label="Move ${esc(x.nombre)} to the Trash">${ICONO.papelera}</button>`;
+  }
+
+  // ---------------------------------------------------------- por dentro
+  async function irACarpeta(ruta, desplazar) {
+    ui.carpeta = ruta;
+    if (desplazar) $('#sec-dentro').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth' });
+    await cargarCarpeta(ruta);
+  }
+  async function cargarCarpeta(ruta) {
+    try {
+      const d = await api('/api/carpeta?ruta=' + encodeURIComponent(ruta));
+      if (ui.carpeta !== ruta) return;
+      ui.carpetaDatos = d;
+      pintarDentro();
+      if (d.pendiente) setTimeout(() => { if (ui.carpeta === ruta) cargarCarpeta(ruta); }, 1500);
+    } catch (e) { aviso(e.message, 'error'); }
+  }
+  function pintarDentro() {
+    const d = ui.carpetaDatos;
+    if (!d) return;
+    if (!d.ok) { $('#dentro').innerHTML = `<p class="vacio">${esc(d.mensaje)}</p>`; return; }
+    const migas = d.migas.map((m, i) => `${i ? '<span class="sep">/</span>' : ''}<button type="button" class="miga" data-accion="carpeta" data-ruta="${esc(m.ruta)}" ${i === d.migas.length - 1 ? 'aria-current="page"' : ''}>${esc(m.nombre)}</button>`).join('');
+    const atajos = `<span class="atajos"><button type="button" class="pildora" data-accion="carpeta" data-ruta="${esc(E.home)}">Home</button><button type="button" class="pildora" data-accion="carpeta" data-ruta="/Applications">Applications</button></span>`;
+    let cuerpo;
+    if (d.nota && !(d.hijos && d.hijos.length)) cuerpo = `<p class="vacio">${esc(d.nota)}</p>`;
+    else if (d.pendiente && !d.hijos) cuerpo = '<p class="vacio">Measuring this folder. Big folders take a while.</p>';
+    else if (d.error) cuerpo = `<p class="vacio">${esc(d.error)}</p>`;
+    else if (!d.hijos || !d.hijos.length) cuerpo = '<p class="vacio">This folder is empty.</p>';
+    else {
+      const max = Math.max(...d.hijos.map(h => h.bytes || 0), 1);
+      const culpable = E.titular && E.titular.seg;
+      const rutaCulpable = culpable && (E.reparto || []).find(s => s.id === culpable);
+      cuerpo = d.hijos.slice(0, 40).map(h => {
+        const puedeEntrar = h.dir && !h.sueltos && !h.noMedido && (h.bytes || 0) > 0;
+        const acento = rutaCulpable && rutaCulpable.ruta && (rutaCulpable.ruta === h.ruta || rutaCulpable.ruta.startsWith(h.ruta + '/'));
+        const visible = h.etiqueta && h.etiqueta !== h.nombre ? h.etiqueta : h.nombre;
+        const PUNTO = { rehace: 'punto', tuyo: 'punto punto--claro', no: 'punto punto--hueco' };
+        const nombre = `<span class="t">${esc(visible)}</span>` + (h.explica ? `<span class="dfila__ex"><span class="${PUNTO[h.nivel] || 'punto punto--claro'}"></span><span>${esc(h.explica)}</span></span>` : (visible !== h.nombre ? `<span class="dfila__et">${esc(h.nombre)}</span>` : ''));
+        const medio = h.noMedido ? `<div class="dfila__nota">${esc(h.noMedido)}</div>` : `<div class="escalon ${acento ? 'escalon--acento' : ''}"><span style="width:${Math.max(0.4, (h.bytes || 0) / max * 100)}%"></span></div>`;
+        return `<div class="dfila">
+          <button type="button" class="dfila__ir" ${puedeEntrar ? `data-accion="carpeta" data-ruta="${esc(h.ruta)}"` : 'disabled'}>${puedeEntrar ? ICONO.chevron : '<svg aria-hidden="true"></svg>'}<span class="dfila__nom">${nombre}</span></button>
+          ${medio}
+          <div class="dfila__tam">${h.noMedido ? '' : esc(gb(h.bytes)) + (h.parcial ? '*' : '')}</div>
+          ${h.sueltos ? '<span></span>' : `<button type="button" class="circulo" data-accion="finder" data-ruta="${esc(h.ruta)}" aria-label="Show ${esc(h.nombre)} in Finder">${ICONO.carpeta}</button>`}
+          ${h.sueltos || h.noMedido ? '<span></span>' : botonPapelera({ ruta: h.ruta, nombre: visible, bytes: h.bytes, explica: h.explica, noBorrar: h.noBorrar })}
+        </div>`;
+      }).join('') + (d.hijos.some(h => h.parcial) ? '<p class="nota-franja" style="padding:12px 36px 20px">* macOS does not allow measuring some folders inside without permission. It may take more space.</p>' : '');
+    }
+    $('#dentro').innerHTML = `<div class="migas">${migas}${atajos}</div>${cuerpo}`;
+  }
+
+  // ---------------------------------------------------------- historia
+  function pintarHistoria() {
+    const serie = (E.historia && E.historia.libre) || [];
+    let graf;
+    if (serie.length < 2) {
+      graf = '<span class="rotulo">Free space</span><p style="font-size:15px;max-width:44ch">No history yet. Every hour I note how much is free: tomorrow you will see the curve.</p>';
+    } else {
+      const W = 760, H = 250, L = 48, B = 26, T = 10;
+      const t0 = serie[0][0], t1 = serie[serie.length - 1][0];
+      const vals = serie.map(x => x[1] / 1e9);
+      let lo = Math.min(...vals), hi = Math.max(...vals);
+      const pad = Math.max((hi - lo) * 0.15, 5);
+      lo = Math.max(0, lo - pad); hi = hi + pad;
+      const X = t => L + (t - t0) / Math.max(1, t1 - t0) * (W - L);
+      const Y = v => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+      const d = serie.map((p, i) => `${i ? 'L' : 'M'}${X(p[0]).toFixed(1)},${Y(p[1] / 1e9).toFixed(1)}`).join('');
+      const ticks = [lo, (lo + hi) / 2, hi].map(v => `<line x1="${L}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(255,255,255,.07)"/><text x="${L - 10}" y="${Y(v) + 4}" text-anchor="end">${fmt(v, 0)} GB</text>`).join('');
+      const fechas = [0, 1 / 3, 2 / 3, 1].map(f => { const t = t0 + (t1 - t0) * f; return `<text x="${X(t)}" y="${H - 4}" text-anchor="${f === 0 ? 'start' : f === 1 ? 'end' : 'middle'}">${esc(fechaCorta(t))}</text>`; }).join('');
+      const valorEn = (t) => { let m = serie[0]; for (const p of serie) { if (Math.abs(p[0] - t) < Math.abs(m[0] - t)) m = p; } return m[1] / 1e9; };
+      const eventos = ((E.historia && E.historia.eventos) || []).filter(e => e.t >= t0 && e.t <= t1).map(e => `<circle cx="${X(e.t)}" cy="${Y(valorEn(e.t))}" r="5" fill="#22c55e"><title>${esc(conHora(e.t))}: cleanup, ${esc(gb(e.liberado))}</title></circle>`).join('');
+      const ultimo = serie[serie.length - 1];
+      graf = `<span class="rotulo">Truly free, without purgeable</span><div class="grafico"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Free space in recent days: now ${esc(gb(ultimo[1]))}">${ticks}${fechas}<path d="${d}" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${eventos}<circle cx="${X(ultimo[0])}" cy="${Y(ultimo[1] / 1e9)}" r="4" fill="#ffffff"/></svg></div>`;
+    }
+    const c = E.crecimiento;
+    let lista;
+    if (!c.desde) lista = '<span class="rotulo">What grew the most</span><p style="font-size:15px">Nothing to compare yet. Check back tomorrow.</p>';
+    else {
+      const dias = Math.max(1, Math.round((Date.now() - c.desde) / DIA));
+      lista = `<span class="rotulo">What grew the most in ${dias === 1 ? '1 day' : dias + ' days'}</span>` + (c.lista.length ? `<ul class="crece-lista">${c.lista.map(x => `<li><span>${esc(x.nombre)}</span><b>+${esc(gb(x.delta))}</b></li>`).join('')}</ul>` : '<p style="font-size:15px">Nothing grew more than 50 MB. All quiet.</p>');
+    }
+    $('#historia').innerHTML = `<div>${graf}</div><div>${lista}</div>`;
+  }
+
+  // ---------------------------------------------------------- RAM
+  let ramTemp = null;
+  async function refrescarRam() {
+    clearTimeout(ramTemp);
+    if (document.visibilityState === 'visible') {
+      try { pintarRam(await api('/api/ram')); } catch {}
+    }
+    ramTemp = setTimeout(refrescarRam, 5000);
+  }
+  function pintarRam(r) {
+    if (!r || !r.total) return;
+    const pct = Math.min(100, r.usada / r.total * 100);
+    const max = Math.max(...r.apps.map(a => a.bytes), 1);
+    const swap = r.swap && r.swap.total ? ` Your Mac is using ${gbRam(r.swap.usada)} of disk as swap${r.swap.usada > 4 * 1073741824 ? ': if it keeps rising, close tabs or heavy apps' : ''}.` : '';
+    $('#ram').innerHTML = `<div>
+        <span class="rotulo">Memory in use</span>
+        <div class="ram__cifra">${esc(gbRam(r.usada))} <span>of ${esc(gbRam(r.total))}</span></div>
+        <div class="ram__barra" role="img" aria-label="${fmt(pct, 0)}% in use"><span style="width:${pct}%;background:${pct > 85 ? 'var(--texto-casa)' : 'rgba(255,255,255,.85)'}"></span></div>
+        <p>What matters is not how much is used, but whether your Mac starts using the disk as memory.${esc(swap)}</p>
+      </div>
+      <div>
+        <span class="rotulo">Using the most</span>
+        ${r.apps.map(a => `<div class="ram__app"><div class="ram__nom">${esc(a.etiqueta)}<small>${a.procesos} ${a.procesos === 1 ? 'process' : 'processes'}</small></div><div class="escalon"><span style="width:${Math.max(1, a.bytes / max * 100)}%"></span></div><div class="dfila__tam">${esc(gbRam(a.bytes))}</div></div>`).join('')}
+      </div>`;
+  }
+
+  // ---------------------------------------------------------- automática
+  const TIPOS = { 'limpieza-auto': 'Weekly cleanup', limpieza: 'Manual cleanup', npm: 'npm cache emptied', proyectos: 'Projects cleaned', 'cowork-reinicio': 'Cowork reset', 'cowork-restaurado': 'Cowork restored', 'cowork-copia-borrada': 'Cowork backup deleted', papelera: 'Moved to Trash', 'papelera-vaciada': 'Trash emptied' };
+  function pintarAuto() {
+    const c = E.config, l = E.limpieza, plan = l.plan;
+    const nNext = plan.next.length;
+    const que = [plan.npm ? 'the npm cache' : null, nNext ? `${nNext} ${nNext === 1 ? 'Next.js build' : 'Next.js builds'}` : null].filter(Boolean).join(' and ');
+    const seg = (nombre, valores, actual, sufijo) => `<div class="segmentos" role="group">${valores.map(v => `<button type="button" data-config="${nombre}" data-valor="${v}" aria-pressed="${v === actual}">${v}${sufijo}</button>`).join('')}</div>`;
+    const reg = (E.registro || []).filter(r => TIPOS[r.tipo]);
+    $('#auto').innerHTML = `
+      <div class="auto__cab">
+        <button type="button" class="interruptor" role="switch" aria-checked="${c.limpiezaAuto}" data-accion="auto" aria-label="Automatic cleanup"><span></span></button>
+        <div><div class="tarjeta">${c.limpiezaAuto ? 'On' : 'Off'}</div><p>Once a week I empty the npm cache and delete the Next.js builds (.next) of projects untouched for more than ${c.diasParado} days. They are caches: they rebuild themselves. Dependencies (node_modules) are never deleted automatically, and locked projects or projects with something running are skipped. Right before deleting I check again that they are still idle.</p></div>
+      </div>
+      <div class="auto__grid">
+        <div><span class="rotulo">Next run</span><div class="cifra-s" style="font-size:22px">${l.proxima ? esc(fechaLarga(l.proxima)) : 'None'}</div><p>${l.ultima ? 'The last one was ' + esc(hace(l.ultima)) + '.' : 'None yet.'}</p></div>
+        <div><span class="rotulo">If it ran today</span><div class="cifra-s" style="font-size:22px">${esc(gb(plan.caches))}</div><p>${que ? 'It would free ' + esc(que) + '.' : 'There would be nothing to clean.'}</p></div>
+        <div><span class="rotulo">Idle means more than</span>${seg('diasParado', [30, 60, 90], c.diasParado, ' days')}</div>
+        <div><span class="rotulo">Warn me below</span>${seg('avisoPct', [10, 15, 20], c.avisoPct, ' %')}</div>
+      </div>
+      <div class="registro"><span class="rotulo">Recent activity</span>${reg.length ? `<ul>${reg.map(r => `<li><time>${esc(conHora(r.t))}</time><span>${esc(TIPOS[r.tipo])}${r.detalle && r.detalle.length ? ': ' + esc(r.detalle.slice(0, 3).join(', ')) + (r.detalle.length > 3 ? '…' : '') : ''}</span><b>${r.liberado ? esc(gb(r.liberado)) : r.enviado ? esc(gb(r.enviado)) : ''}</b></li>`).join('')}</ul>` : '<p style="font-size:14px">Nothing yet.</p>'}</div>`;
+  }
+
+  function pintarPie() {
+    $('#pie').innerHTML = `<p>Runs only on your Mac, at localhost:${E.puerto}. Nothing is sent to the internet.</p><p>Full scan once a day, free space check every hour. Nothing is deleted unless you click and confirm, or turn on the weekly cleanup of caches.</p><p>To uninstall: <code>npx fast-atlas uninstall</code></p><p>Fast Atlas ${esc(E.version)}, a <a class="enlace" href="https://fast-web.es" target="_blank" rel="noopener">Fast Web</a> Labs app. If it helped you, you can <a class="enlace" href="https://github.com/sponsors/Fast-web-es" target="_blank" rel="noopener">sponsor Fast Web Labs</a>.</p>`;
+  }
+
+  // ---------------------------------------------------------- acciones
+  async function hacer(cuerpo, enCurso) {
+    if (ui.ocupado) return null;
+    ui.ocupado = true;
+    if (enCurso) aviso(enCurso);
+    try {
+      const r = await api('/api/accion', cuerpo);
+      aviso(r.mensaje || (r.ok ? 'Done.' : 'It did not work.'), r.ok ? 'ok' : 'error');
+      return r;
+    } catch (e) { aviso(e.message, 'error'); return null; }
+    finally { ui.ocupado = false; refrescar(); if (ui.carpeta) cargarCarpeta(ui.carpeta); }
+  }
+
+  async function limpiarAhora() {
+    const plan = E.limpieza.plan;
+    const dias = E.config.diasParado;
+    if (!plan.caches && !plan.dependencias) {
+      await modal({ titulo: 'Nothing to clean without looking first.', cuerpo: `<p>The npm cache is almost empty and no unlocked project has been idle for more than ${dias} days. Check Your projects if you want to delete one by hand.</p>`, cancelar: 'Got it' });
+      return;
+    }
+    const filas = [];
+    if (plan.npm) filas.push(`<li><span>npm cache</span><b>${esc(gb(plan.npm))}</b></li>`);
+    if (plan.next.length) filas.push(`<li><span>Next.js builds of ${plan.next.length} idle ${plan.next.length === 1 ? 'project' : 'projects'}</span><b>${esc(gb(plan.next.reduce((t, p) => t + p.bytes, 0)))}</b></li>`);
+    const gestores = [...new Set(plan.deps.map(p => p.gestor))].map(g => g + ' install').join(' or ');
+    const casilla = plan.deps.length ? `<label class="casilla"><input type="checkbox" id="conDeps"><span>Also delete the dependencies (node_modules) of ${plan.deps.length} idle ${plan.deps.length === 1 ? 'project' : 'projects'}: <strong style="color:var(--white)">${esc(gb(plan.dependencias))}</strong><small>To restore one: ${esc(gestores)} in its folder. Your projects keeps the exact command.</small></span></label>` : '';
+    const si = await modal({
+      titulo: 'Clean what rebuilds itself',
+      cuerpo: `<p>When you confirm, I empty the npm cache with npm’s own command and delete the .next folder of each idle project, after checking again that it is still idle and has nothing running. This does not go to the Trash: it is deleted directly, because it rebuilds itself. Your code and locked projects are never touched.</p>${filas.length ? `<ul>${filas.join('')}</ul>` : '<p>The caches are already clean.</p>'}${casilla}<div class="total"><span>Total</span><b id="totalLimpieza">${esc(gb(plan.caches))}</b></div>`,
+      confirmar: 'Clean', peligro: true,
+      alAbrir: (d) => {
+        const c = d.querySelector('#conDeps'), btn = d.querySelector('button[value="si"]');
+        const actualizar = () => { const t = plan.caches + (c && c.checked ? plan.dependencias : 0); d.querySelector('#totalLimpieza').textContent = gb(t); btn.disabled = t <= 0; };
+        if (c) c.addEventListener('change', actualizar);
+        actualizar();
+      },
+    });
+    const conDeps = !!(document.querySelector('#conDeps') && document.querySelector('#conDeps').checked);
+    if (si) await hacer({ tipo: 'limpiar', dependencias: conDeps }, 'Cleaning. It may take a minute.');
+  }
+
+  async function vaciarNpm() {
+    const s = E.seguimiento.find(x => x.id === 'npm');
+    const si = await modal({ titulo: 'Empty the npm cache', cuerpo: `<p>Copies of packages you already downloaded (${esc(gb(s && s.bytes))}). npm never empties it on its own. The next npm install downloads whatever is missing, so that one install is a bit slower.</p>`, confirmar: 'Empty', peligro: true });
+    if (si) await hacer({ tipo: 'npm' }, 'Emptying the npm cache.');
+  }
+
+  async function reiniciarCowork() {
+    let c;
+    try { c = (await api('/api/accion', { tipo: 'cowork-estado' })).cowork; } catch (e) { return aviso(e.message, 'error'); }
+    if (!c || !c.disco) return modal({ titulo: 'No Cowork disk.', cuerpo: '<p>I cannot find the Cowork disk. If you do not use Cowork, it takes no space.</p>', cancelar: 'Got it' });
+    if (c.claudeAbierto) return modal({ titulo: 'Quit Claude first.', cuerpo: '<p>The Cowork disk can only be moved with the Claude desktop app fully quit: Cmd+Q, not just closing the window. This panel keeps working in your browser. Once Claude is closed, press Reset again.</p>', cancelar: 'Got it' });
+    if (c.enUso) return modal({ titulo: 'Cowork is still releasing its disk.', cuerpo: '<p>Claude is closed, but its virtual machine is still shutting down. Wait a few seconds and press Reset again.</p>', cancelar: 'Got it' });
+    const si = await modal({
+      titulo: 'Reset the Cowork disk',
+      cuerpo: `<p>I move the Cowork disk (${esc(gb(c.disco))}) to a backup. Nothing is deleted yet.</p><p>The next time you open Cowork, Claude rebuilds it from scratch${c.base ? ' from the base image you already have, without downloading anything' : ' (it may download it again, around 10 GB)'}. Your sessions and projects are not touched.</p><p>Once you check that Cowork works, delete the backup from here to get the space back. If something fails, restore it.</p>`,
+      confirmar: 'Reset', icono: 'girar',
+    });
+    if (si) await hacer({ tipo: 'cowork-reiniciar' });
+  }
+
+  async function borrarMarcados() {
+    const lista = (E.proyectos ? E.proyectos.lista : []).filter(p => ui.marcados.has(p.ruta));
+    if (!lista.length) return;
+    const sinLock = lista.filter(p => !p.lock);
+    const total = lista.reduce((s, p) => s + p.nm + p.next, 0);
+    const filas = lista.slice(0, 7).map(p => `<li><span>${esc(p.nombre)} <span style="color:${p.lock ? 'var(--zinc-500)' : '#fca5a5'}">${p.lock ? 'restore with ' + esc(p.gestor) + ' install' : 'no lockfile'}</span></span><b>${esc(gb(p.nm + p.next))}</b></li>`).join('') + (lista.length > 7 ? `<li><span>And ${lista.length - 7} more</span><b></b></li>` : '');
+    const si = await modal({
+      titulo: `Delete dependencies and builds of ${lista.length} ${lista.length === 1 ? 'project' : 'projects'}`,
+      cuerpo: `<p>I delete node_modules and .next. Your code is not touched. If one has something running (npm run dev, Claude Code), I skip it.</p><p>To restore one, paste its command in Terminal. You will find them in Your projects, under “To restore what you cleaned”.</p>${sinLock.length ? `<p style="color:#fca5a5">${sinLock.length === 1 ? 'One has no' : sinLock.length + ' have no'} lockfile: versions may change when reinstalling.</p>` : ''}<ul>${filas}</ul><div class="total"><span>Total</span><b>${esc(gb(total))}</b></div>`,
+      confirmar: 'Delete', peligro: true,
+    });
+    if (!si) return;
+    const r = await hacer({ tipo: 'borrar-proyectos', rutas: lista.map(p => p.ruta) }, 'Deleting. It may take a minute.');
+    if (r && r.ok) ui.marcados.clear();
+  }
+
+  async function mandarAPapelera(ds) {
+    const nativo = E.papelera && E.papelera.nativo;
+    const si = await modal({
+      titulo: 'Move to Trash',
+      cuerpo: `<ul><li><span>${esc(ds.nombre)}</span><b>${esc(gb(Number(ds.bytes) || 0))}</b></li></ul>${ds.explica ? `<p>${esc(ds.explica)}</p>` : ''}<p>It goes to your Mac’s Trash: you can put it back from there until you empty it. The space is freed when you empty the Trash.</p>${nativo ? '' : '<p>If macOS asks whether “node” can control Finder, that is Fast Atlas: allow it.</p>'}`,
+      confirmar: 'Move to Trash', peligro: true,
+    });
+    if (si) await hacer({ tipo: 'papelera', ruta: ds.ruta }, 'Moving to the Trash.');
+  }
+  async function vaciarLaPapelera() {
+    const env = E.papelera ? E.papelera.enviado : 0;
+    const si = await modal({
+      titulo: 'Empty the Trash',
+      cuerpo: `<p>Deletes everything in the Trash forever, including what you trashed earlier from Finder. It cannot be undone.</p>${env ? `<p>You sent ${esc(gb(env))} from here.</p>` : ''}<p>The first time, macOS will ask whether “node” can control Finder: that is Fast Atlas. Allow it.</p>`,
+      confirmar: 'Empty Trash', peligro: true,
+    });
+    if (si) await hacer({ tipo: 'vaciar-papelera' }, 'Emptying the Trash.');
+  }
+
+  async function borrarCopia(archivo) {
+    const r = (E.cowork.respaldos || []).find(x => x.archivo === archivo);
+    const si = await modal({ titulo: 'Delete the Cowork backup', cuerpo: `<p>This one is permanent: it frees ${esc(gb(r && r.bytes))}. Only do it if Cowork already works fine after the reset.</p>`, confirmar: 'Delete backup', peligro: true });
+    if (si) await hacer({ tipo: 'cowork-borrar-copia', archivo });
+  }
+  async function restaurar(archivo) {
+    const si = await modal({ titulo: 'Restore Cowork as it was', cuerpo: '<p>I put back the Cowork disk from before the reset. Claude has to be fully quit. The new disk, if there is one, is kept as a backup.</p>', confirmar: 'Restore', icono: 'deshacer' });
+    if (si) await hacer({ tipo: 'cowork-restaurar', archivo });
+  }
+
+  document.addEventListener('click', async (ev) => {
+    const el = ev.target.closest('[data-accion], [data-seg], [data-orden], [data-config]');
+    if (!el) return;
+    if (el.dataset.seg && !el.dataset.accion) return abrirSeg(el.dataset.seg);
+    if (el.dataset.orden) { ui.orden = el.dataset.orden; return pintarProyectos(); }
+    if (el.dataset.config) {
+      await api('/api/config', { [el.dataset.config]: Number(el.dataset.valor) }).catch(e => aviso(e.message, 'error'));
+      return refrescar();
+    }
+    const a = el.dataset.accion;
+    if (a === 'detalle') { const id = el.dataset.id; ui.abiertos.has(id) ? ui.abiertos.delete(id) : ui.abiertos.add(id); return pintarCrece(); }
+    if (a === 'finder') { const r = await api('/api/accion', { tipo: 'finder', ruta: el.dataset.ruta }).catch(e => ({ ok: false, mensaje: e.message })); if (!r.ok || r.mensaje) aviso(r.mensaje || 'Could not open Finder.', r.ok ? 'ok' : 'error'); return; }
+    if (a === 'carpeta') return irACarpeta(el.dataset.ruta, !el.closest('#dentro'));
+    if (a === 'ir-proyectos') return $('#sec-proyectos').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth' });
+    if (a === 'npm') return vaciarNpm();
+    if (a === 'cowork') return reiniciarCowork();
+    if (a === 'marcar-parados') { E.proyectos.lista.filter(p => parado(p) && p.lock && !p.proteccion && p.nm > 0).forEach(p => ui.marcados.add(p.ruta)); return pintarProyectos(); }
+    if (a === 'copiar') return copiar(el.dataset.texto);
+    if (a === 'proteger') {
+      const r = await api('/api/accion', { tipo: 'proteger', ruta: el.dataset.ruta, valor: el.dataset.valor === '1' }).catch(e => ({ ok: false, mensaje: e.message }));
+      aviso(r.mensaje || 'Hecho.', r.ok ? 'ok' : 'error');
+      if (el.dataset.valor === '1') ui.marcados.delete(el.dataset.ruta);
+      return refrescar();
+    }
+    if (a === 'borrar-marcados') return borrarMarcados();
+    if (a === 'ver-todos') { ui.todos = !ui.todos; return pintarProyectos(); }
+    if (a === 'borrar-copia') return borrarCopia(el.dataset.archivo);
+    if (a === 'restaurar') return restaurar(el.dataset.archivo);
+    if (a === 'a-papelera') return mandarAPapelera(el.dataset);
+    if (a === 'no-borrar') return aviso('Not deletable from here: ' + el.dataset.motivo);
+    if (a === 'vaciar-papelera') return vaciarLaPapelera();
+    if (a === 'auto') { await api('/api/config', { limpiezaAuto: !E.config.limpiezaAuto }).catch(e => aviso(e.message, 'error')); return refrescar(); }
+  });
+  document.addEventListener('change', (ev) => {
+    const c = ev.target.closest('[data-marca]');
+    if (!c) return;
+    c.checked ? ui.marcados.add(c.dataset.marca) : ui.marcados.delete(c.dataset.marca);
+    pintarProyectos();
+  });
+  ['mouseover', 'focusin'].forEach(tipo => document.addEventListener(tipo, (ev) => {
+    const el = ev.target.closest('#franja [data-seg], #leyenda [data-seg]');
+    enfocarSeg(el ? el.dataset.seg : null);
+  }));
+  $('#btnLimpiar').addEventListener('click', limpiarAhora);
+
+  // ---------------------------------------------------------- instalar como app
+  let promptInstalar = null;
+  const enApp = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  if (!enApp) $('#btnInstalar').hidden = false;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); promptInstalar = e; });
+  window.addEventListener('appinstalled', () => { $('#btnInstalar').hidden = true; aviso('Installed. It is now in your Dock and Applications.'); });
+  $('#btnInstalar').addEventListener('click', async () => {
+    if (promptInstalar) { const p = promptInstalar; promptInstalar = null; p.prompt(); return; }
+    const ua = navigator.userAgent;
+    const esSafari = /Safari\//.test(ua) && !/Chrome\/|Chromium\/|Edg\/|Firefox\//.test(ua);
+    const esFirefox = /Firefox\//.test(ua);
+    const cuerpo = esSafari
+      ? '<p>In Safari, choose <strong style="color:var(--white)">File &gt; Add to Dock</strong>. Keep the name Fast Atlas and click Add.</p><p>It stays in your Dock with its icon and opens in its own window, without the browser bar. Requires macOS Sonoma or later.</p>'
+      : esFirefox
+        ? '<p>Firefox cannot install pages as apps. Open <strong style="color:var(--white)">localhost:4848</strong> in Safari or Chrome and press Install app again.</p>'
+        : '<p>In Chrome, click the install icon on the right side of the address bar. If it does not show up, reload the page once and press Install app again.</p><p>It stays in your Dock and Applications with its icon and opens in its own window.</p>';
+    await modal({ titulo: 'Use it as an app', cuerpo, cancelar: 'Got it' });
+  });
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+  $('#btnEscanear').addEventListener('click', async () => { await hacer({ tipo: 'escanear' }); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { refrescar(); refrescarRam(); } });
+
+  refrescar();
+  refrescarRam();
+})();
+</script>
+</body>
+</html>

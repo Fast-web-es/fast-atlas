@@ -1,0 +1,15 @@
+{
+  "name": "fast-atlas",
+  "version": "1.0.0",
+  "description": "A local map of your Mac: what takes up disk and memory, what each thing is, and what is safe to remove. Made for people who code with AI.",
+  "type": "module",
+  "bin": { "fast-atlas": "bin/fast-atlas.mjs" },
+  "files": ["bin/", "app/", "README.md", "LICENSE"],
+  "engines": { "node": ">=18.15" },
+  "scripts": { "test": "node --test test/safety.test.mjs" },
+  "keywords": ["macos", "disk", "disk-space", "cleanup", "node_modules", "claude", "cowork", "ollama", "developer-tools"],
+  "author": "Fast Web (https://fast-web.es)",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/Fast-web-es/fast-atlas.git" },
+  "homepage": "https://github.com/Fast-web-es/fast-atlas#readme"
+}
